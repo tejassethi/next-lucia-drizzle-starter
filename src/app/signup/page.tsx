@@ -53,7 +53,7 @@ async function signup(_: any, formData: FormData): Promise<ActionResult> {
     .values({
       id: uuidv4(),
       email: email,
-      name: "random name",
+      name: "",
       password: hashPassword,
     })
     .returning({

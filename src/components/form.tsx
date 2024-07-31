@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormState } from "react-dom";
+import { toast } from "sonner";
 
 export function Form({
   children,
@@ -12,12 +13,13 @@ export function Form({
   const [state, formAction] = useFormState(action, {
     error: null,
   });
-  return (
-    <form action={formAction}>
-      {children}
-      <p className="text-red-700">{state.error}</p>
-    </form>
-  );
+
+  // Show toast if there's an error
+  if (state.error) {
+    toast.error(state.error);
+  }
+
+  return <form action={formAction}>{children}</form>;
 }
 
 export interface ActionResult {

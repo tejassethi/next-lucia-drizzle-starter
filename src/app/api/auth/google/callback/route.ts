@@ -55,14 +55,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   let userId = "";
 
-  const quser = await db
+  const user = await db
     .select()
     .from(UserTable)
-    .where(eq(UserTable.email, sql.placeholder("email")))
-    .prepare();
-
-  const user = await quser.get({ email: googleData.email });
-  userId = user?.id as string;
+    .where(eq(UserTable.email, googleData.email))
+    .get();
 
   // if the email does not exist, then create a new user and sign them in...
   if (!user) {
@@ -72,7 +69,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
         id: uuidv4(),
         email: googleData.email,
         name: googleData.name,
-        picture: googleData.picture,
       })
       .returning({
         userId: UserTable.id,

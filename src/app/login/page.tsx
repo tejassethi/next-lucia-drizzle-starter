@@ -36,8 +36,8 @@ export default async function Page() {
 
 async function login(_: any, formData: FormData): Promise<ActionResult> {
   "use server";
-  const email = formData.get("email");
-  const password = formData.get("password");
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
   const existingUser = await db
     .select()
     .from(UserTable)
@@ -50,10 +50,13 @@ async function login(_: any, formData: FormData): Promise<ActionResult> {
     };
   }
 
-  const match = bcrypt.compare(
-    password as string,
-    existingUser.password as string
-  );
+  if (!existingUser.password) {
+    return {
+      error: "Please sign in with your provider.",
+    };
+  }
+
+  const match = await bcrypt.compare(password, existingUser.password as string);
   if (!match) {
     return {
       error: "Incorrect username or password",
@@ -67,5 +70,5 @@ async function login(_: any, formData: FormData): Promise<ActionResult> {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/");
+  return redirect("/dashboard");
 }
