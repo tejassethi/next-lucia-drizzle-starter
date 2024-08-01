@@ -1,8 +1,5 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-const path = require("node:path");
-import dotenv from "dotenv";
-dotenv.config();
 
 const client = createClient({
   url: process.env.TURSO_CONNECTION_URL!,
