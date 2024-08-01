@@ -32,6 +32,17 @@ export const SessionTable = sqliteTable("session", {
 export type TypeSessionTable = InferSelectModel<typeof SessionTable>;
 export type TypeNewSessionTable = InferInsertModel<typeof SessionTable>;
 
+export const VerificationTable = sqliteTable("verification", {
+  id: text("id").notNull().primaryKey(),
+  email: text("email").notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch() + 600)`),
+});
+
+export type TypeVerficaionTable = InferSelectModel<typeof VerificationTable>;
+export type TypeNewVerficaionTable = InferInsertModel<typeof VerificationTable>;
+
 // relations ...
 // relations don't impact your database schema
 // rather used to define relations between tables on the application level

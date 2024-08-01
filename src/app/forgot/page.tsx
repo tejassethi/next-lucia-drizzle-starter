@@ -12,10 +12,10 @@ import { addSeconds, fromUnixTime, getUnixTime, isBefore } from "date-fns";
 import { cookies } from "next/headers";
 import { date, datetime } from "drizzle-orm/mysql-core";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { H1, H2, H4 } from "@/components/ui/Typography";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { H2 } from "@/components/ui/Typography";
+import { Input } from "@/components/ui/input";
 import { resend } from "@/lib/resend";
 
 export default async function Page() {
@@ -27,7 +27,7 @@ export default async function Page() {
     <div className="w-full h-screen flex justify-center place-items-center">
       <Card className="w-96">
         <CardHeader>
-          <H2>Create Account</H2>
+          <H2>Forgot Password</H2>
         </CardHeader>
         <CardContent>
           <Form classname="space-y-2" action={sendVerfication}>
@@ -54,19 +54,6 @@ async function sendVerfication(
 ): Promise<ActionResult> {
   "use server";
   const email = formData.get("email") as string;
-
-  const user = await db
-    .select()
-    .from(UserTable)
-    .where(eq(UserTable.email, email))
-    .get();
-
-  console.log(user);
-
-  if (user) {
-    return { error: "User already exists" };
-  }
-
   const verification = await db
     .insert(VerificationTable)
     .values({
@@ -83,7 +70,7 @@ async function sendVerfication(
   }`;
 
   const { data, error } = await resend.emails.send({
-    from: "Lucia Next <lucianext@sample.com>",
+    from: "Lucia Next <lucianext@resend.dev>",
     to: email,
     subject: "Lucia Next Verification",
     text: `Your verification link is ${verificationLink}`,

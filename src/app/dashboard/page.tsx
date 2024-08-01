@@ -1,4 +1,5 @@
 import { ActionResult, Form } from "@/components/form";
+import { Button } from "@/components/ui/button";
 import { lucia, validateRequest } from "@/lib/auth";
 import { User } from "lucia";
 import { cookies } from "next/headers";
@@ -13,7 +14,7 @@ export default async function Page() {
   }
 
   return (
-    <>
+    <div className="w-full h-screen flex justify-center place-items-center">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="flex items-center gap-2 border p-4 rounded-lg bg-gray-100 transition-all cursor-pointer hover:shadow-xl">
           <div className="flex flex-col">
@@ -23,10 +24,10 @@ export default async function Page() {
       </div>
       <div className="absolute right-4 top-4">
         <Form action={logout}>
-          <button>Sign out</button>
+          <Button>Sign out</Button>
         </Form>{" "}
       </div>
-    </>
+    </div>
   );
 }
 
