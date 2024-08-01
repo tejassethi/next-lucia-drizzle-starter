@@ -53,7 +53,24 @@ async function sendVerfication(
   formData: FormData
 ): Promise<ActionResult> {
   "use server";
+
   const email = formData.get("email") as string;
+  const user = await db
+    .select()
+    .from(UserTable)
+    .where(eq(UserTable.email, email))
+    .get();
+
+  console.log(user);
+
+  if (!user) {
+    return { error: "User does not exist." };
+  }
+
+  if (!user.password) {
+    return { error: "Please log in with your provider." };
+  }
+
   const verification = await db
     .insert(VerificationTable)
     .values({

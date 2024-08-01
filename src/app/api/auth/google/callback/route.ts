@@ -74,7 +74,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
         userId: UserTable.id,
       });
 
-    userId = newUser.at(0)?.userId as string;
+    userId = newUser[0]?.userId as string;
+  } else {
+    userId = user.id;
   }
 
   // if email already exists, then create a new cookie for user and sign them in...

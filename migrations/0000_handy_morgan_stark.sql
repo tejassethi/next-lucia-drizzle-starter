@@ -11,9 +11,14 @@ CREATE TABLE `user` (
 	`email` text(255) NOT NULL,
 	`name` text(255) NOT NULL,
 	`role` text DEFAULT 'USER' NOT NULL,
-	`picture` text(255),
 	`password` text(255),
 	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `verification` (
+	`id` text PRIMARY KEY NOT NULL,
+	`email` text NOT NULL,
+	`expires_at` integer DEFAULT (unixepoch() + 600) NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);

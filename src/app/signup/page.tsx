@@ -83,7 +83,7 @@ async function sendVerfication(
   }`;
 
   const { data, error } = await resend.emails.send({
-    from: "Lucia Next <lucianext@sample.com>",
+    from: "Lucia Next <lucianext@resend.dev>",
     to: email,
     subject: "Lucia Next Verification",
     text: `Your verification link is ${verificationLink}`,

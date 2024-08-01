@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <Input type="password" name="password" id="password" />
             <Label htmlFor="confirmpassword">Confirm Password</Label>
             <Input
-              type="confirmpassword"
+              type="password"
               name="confirmpassword"
               id="confirmpassword"
             />
@@ -98,32 +98,44 @@ async function signup(_: any, formData: FormData): Promise<ActionResult> {
     .where(eq(UserTable.email, email))
     .get();
 
-  console.log(user);
+  if (!user) {
+    const u = await db
+      .insert(UserTable)
+      .values({
+        id: uuidv4(),
+        email: email,
+        name: "",
+        password: hashPassword,
+      })
+      .returning({
+        userId: UserTable.id,
+      });
 
-  if (user) {
-    return { error: "User already exists" };
+    const session = await lucia.createSession(u.at(0)?.userId as string, {});
+    const sessionCookie = await lucia.createSessionCookie(session.id);
+
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+  } else {
+    await db
+      .update(UserTable)
+      .set({
+        password: hashPassword,
+      })
+      .where(eq(UserTable.email, email));
+
+    const session = await lucia.createSession(user.id as string, {});
+    const sessionCookie = await lucia.createSessionCookie(session.id);
+
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
   }
-
-  const u = await db
-    .insert(UserTable)
-    .values({
-      id: uuidv4(),
-      email: email,
-      name: "",
-      password: hashPassword,
-    })
-    .returning({
-      userId: UserTable.id,
-    });
-
-  const session = await lucia.createSession(u.at(0)?.userId as string, {});
-  const sessionCookie = await lucia.createSessionCookie(session.id);
-
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
 
   return redirect("/");
 }

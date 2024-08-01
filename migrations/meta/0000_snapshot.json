@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f4338cf9-e922-4c0c-b3e9-ad7ae2a8cb9c",
+  "id": "71de7be8-83a6-4d10-895c-fdd77b8b301b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "session": {
@@ -88,13 +88,6 @@
           "autoincrement": false,
           "default": "'USER'"
         },
-        "picture": {
-          "name": "picture",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "password": {
           "name": "password",
           "type": "text(255)",
@@ -120,6 +113,37 @@
           "isUnique": true
         }
       },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "verification": {
+      "name": "verification",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch() + 600)"
+        }
+      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
